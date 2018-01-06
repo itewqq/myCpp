@@ -16,7 +16,7 @@ struct cts
     int d;
 }C[100005];
 typedef struct cts cts;
-bool cmp(const cts &a,const cts&b)
+bool cmp(const cts &a,const cts&b)//注意需要const，这次竟然忘了
 {
     return a.d<b.d;
 };
@@ -24,7 +24,7 @@ struct tp
 {
     int i;
     int a;
-    bool operator<(const struct tp &b)const
+    bool operator<(const struct tp &b)const//两个const
     {
         return a<b.a;
     }
