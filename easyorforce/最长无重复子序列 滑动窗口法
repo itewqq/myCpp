@@ -1,0 +1,48 @@
+//UVa 11572
+#include<bits/stdc++.h>
+#include<cmath>
+using namespace std;
+set<int> S;
+int CR[1000005];
+int main()
+{
+    int T,N,MAX=1,L,R,item=0;
+    scanf("%d",&T);
+    while(T--)
+    {
+        S.clear();
+        scanf("%d",&N);
+        if(N>0)
+        {
+            for (int i=0; i<N; i++)
+                scanf("%d",&CR[i]);
+            for (L=0,R=1,item=1,MAX=1,S.insert(CR[0]); R<N;)
+            {
+                while(S.find(CR[R])==S.end()&&R<N)
+                {
+                    S.insert(CR[R]);
+                    R++;
+                    item++;
+                    MAX=max(MAX,item);
+                }
+                if(R==N)break;
+                while(S.find(CR[R])!=S.end()&&L<R)
+                {
+                    S.erase(CR[L]);
+                    L++;
+                    item--;
+                }
+                if(L==R&&R<N)
+                {
+                    S.insert(CR[R]);
+                    R++;
+                    item++;
+                }
+            }
+            printf("%d\n",MAX);
+        }
+        else
+            printf("0\n");
+    }
+    return 0;
+}
