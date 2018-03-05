@@ -1,5 +1,8 @@
 //UVa 1025
-//
+//感觉自己做的是纯暴力而不是dp..
+//但是不懂得是为什么,刘大爷倒过来推的方法就会降低复杂度???
+//只考虑到最邻近的站?为什么?不懂
+
 #include<bits/stdc++.h>
 #include<cmath>
 #include<iostream>
