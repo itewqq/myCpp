@@ -1,8 +1,9 @@
-昨天的题目，最终的错误是出在如何取到最小值上
+昨天的题目，首先烦的错误就是没有搞清楚解方程时候各个参数，是应该正还是应该负数，哪些是正数那些是负数
+最终的错误是出在如何取到最小值上
 应该是对n/d取模，因为最后的解是x0+i*(n/d),所以如果是负数的话也应该是在x0的基础上加n/d，也就是对其取两次模
 而我一开始一直在对n进行操作，wa到怀疑人生
 今天又和女朋友吵架了，唉😔做题又做不好，心累
-//poj1601
+//poj3292
 //#include<bits/stdc++.h>
 #include<iostream>
 #include<cmath>
@@ -83,7 +84,7 @@ void get_C(int m)
 }
 */
 
-ll ans[1005];
+
 
 void ex_gcd(ll a,ll b,ll& d,ll& x,ll& y)
 {
@@ -91,7 +92,6 @@ void ex_gcd(ll a,ll b,ll& d,ll& x,ll& y)
     else{ex_gcd(b,a%b,d,y,x);y-=x*(a/b);}
 }
 
-int tk=0;
 
 ll solve(ll a,ll b,ll n)
 {
@@ -119,54 +119,16 @@ ll solve(ll a,ll b,ll n)
 
 int main()
 {
-    int T=1000;
-    while(T--)
-    {
+
     ll x,y,m,n,L;
     scanf("%I64d%I64d%I64d%I64d%I64d",&x,&y,&m,&n,&L);
-    /*
-    if(n>m)
-    {
-        swap(m,n);
-        swap(x,y);
-
-    */
     ll Ans=solve(((m-n)%L+L)%L,((y-x)%L+L)%L,L);
-    ans[tk++]=Ans;
-    /*
+
     if(Ans==-1)
         printf("Impossible\n");
     else
         printf("%I64d\n",Ans);
-    */
-    }
-
-    for(int i=0;i<tk;i++)
-    {
-        if(ans[i]!=-1)
-            cout<<ans[i]<<endl;
-        else
-            cout<<"Impossible\n";
-    }
-
     return 0;
 }
-/*
-        for(int i=0;i<=maxx;i++)
-        {
-            for(int j=0;j<=maxy;j++)
-            cout<<xa[i][j]<<" ";
-            cout<<endl;
-        }
-        for(int i=0;i<=maxx;i++)
-        {
-            for(int j=0;j<=maxy;j++)
-            cout<<ya[i][j]<<" ";
-            cout<<endl;
-        }
-*/
-/*
-702 337 349 762 1908
-413 1908 1 -559 121
-20000050000
-*/
+
+
