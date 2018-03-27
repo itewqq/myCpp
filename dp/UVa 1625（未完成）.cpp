@@ -4,3 +4,101 @@
 很多东西敲着敲着就忘了，有时候又是一些下标的问题，总而言之就是对各种东西都没有一个很稳的把握，唉
 话虽如此，还是应该继续努力
 加油吧，搏一搏
+//UVa1625
+#include <iostream>
+#include<cstdio>
+#include<queue>
+#include<vector>
+#include<cmath>
+#include<cstring>
+#include<string>
+#include<set>
+using namespace std;
+typedef long long LL;
+const int maxn=5000+5;
+//const int MOD=1e9+7;
+int a[maxn];
+int b[maxn];
+int tempi[30];
+int temp[30];
+int total[30];
+int dist1[maxn][maxn];
+int dist2[maxn][maxn];
+int dp[maxn][maxn];
+
+void cal(int la,int lb)
+{
+    set<int>S;
+    for (int i=1;i<=la;i++)
+    {
+        tempi[a[i]]++;
+        S.insert(a[i]);
+        memcpy(temp,tempi,120);
+        for (int j=1;j<=lb;j++)
+        {
+            for (set<int>::iterator it=S.begin();it!=S.end();it++)
+                if(temp[*it]<total[*it])
+                {
+                    dist1[i][j]++;
+                }
+                else
+                {
+                    S.erase(*it);//?
+                }
+            temp[b[j]]++;
+        }
+    }
+    S.clear();
+    memset(temp,0,120);
+    memset(tempi,0,120);
+    for (int i=1;i<=lb;i++)
+    {
+        tempi[b[i]]++;
+        S.insert(b[i]);
+        memcpy(temp,tempi,120);
+        for (int j=1;j<=la;j++)
+        {
+            for (set<int>::iterator it=S.begin();it!=S.end();it++)
+                if(temp[*it]<total[*it])
+                {
+                    dist2[i][j]++;
+                }
+                else
+                {
+                    S.erase(*it);//?
+                }
+            temp[a[j]]++;
+        }
+    }
+}
+
+int main()
+{
+    int T,la,lb;
+    char ta;
+    scanf(" %d",&T);getchar();
+    while(T--)
+    {
+        la=0;lb=0;
+
+        while(scanf("%c",&ta)&&ta!='\n')
+        {
+
+            a[++la]=ta-'A';
+            total[ta-'A']++;
+        }
+
+        while(scanf("%c",&ta)&&ta!='\n')
+        {cout<<" ta "<<ta;
+            b[++lb]=ta-'A';
+            total[ta-'A']++;
+        }
+        cal(la,lb);
+        memset(dp,0,sizeof(dp));///
+        for (int i=1;i<=la;i++)
+            for (int j=1;j<=lb;j++)
+                dp[i][j]=min(dp[i][j-1]+dist1[i][j],dp[i-1][j]+dist2[i][j]);
+        cout<<dp[la][lb]<<endl;
+    }
+    return 0;
+}
