@@ -1,0 +1,100 @@
+置换的简单应用
+最重要的是学到了puts比for（）printf %c 一个一个输出快很多！！！！！十倍差距
+//Poj1026
+#include <iostream>
+#include<cstdio>
+#include<queue>
+#include<vector>
+#include<cmath>
+#include<cstring>
+#include<string>
+#include<set>
+using namespace std;
+typedef long long LL;
+const int maxn=200+5;
+//const int MOD=1e9+7;
+
+int next[maxn];
+char sq[maxn];
+int vis[maxn];
+int ns[maxn];
+int out[maxn];
+char ans[maxn];
+
+void calnext(int N)
+{
+    memset(vis,0,4*(maxn+1));
+    int k,c;
+    for (int i=1; i<=N; i++)if(!vis[i])
+        {
+            vis[i]=1;
+            k=next[i],c=1;
+            while(!vis[k])
+            {
+                k=next[k];
+                ++c;
+            }
+            ns[i]=c;
+            k=next[i];
+            while(!vis[k])
+            {
+                vis[k]=1;
+                ns[k]=c;
+                k=next[k];
+            }
+        }
+    return;
+}
+
+void calout(int N,int k)
+{
+    int temp,w;
+    for (int i=1; i<=N; i++)
+    {
+        temp=i;
+        w=k%ns[i];
+        for (int j=0; j<w; j++)
+        {
+            temp=next[temp];
+        }
+        out[i]=temp;
+    }
+}
+
+int main()
+{
+    int N,k;
+    char temp;
+    while(~scanf(" %d",&N)&&N!=0)
+    {
+        for (int i=1; i<=N; i++)
+            scanf(" %d",&next[i]);
+        calnext(N);
+        while(~scanf("%d",&k)&&k!=0)
+        {
+
+            calout(N,k);
+            getchar();
+            temp='f';
+            for (int i=1; i<=N; i++)
+            {
+                if(temp!='\n')
+                    scanf("%c",&temp);
+                if(temp=='\n')
+                    sq[i]=' ';
+                else
+                    sq[i]=temp;
+            }
+            for (int i=1; i<=N; i++)
+                ans[out[i]]=sq[i];
+            ans[N+1]='\0';
+            puts(ans+1);
+            /*
+            for (int i=1;i<=N;i++)
+                printf("%c",ans[i]);
+                */
+            //printf("\n");
+        }printf("\n");
+    }
+    return 0;
+}
