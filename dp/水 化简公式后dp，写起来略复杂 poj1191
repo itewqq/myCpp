@@ -1,0 +1,97 @@
+其实算是水题吧，但是由于主要部分是自己独立搞出来的还是比较舒服
+唯一的错误是，对于同一个矩形，可能会在不同的阶段遇到，所以vis数组还应该再加上一维阶段！！！这个是确实没有想到，重大失误
+其他的都是常规操作
+另外参考别人的代码啊，有个优化就是枚举的时候，我是把矩形变小的四个方向全枚举了一遍，而其实可以只分两种情况就是横的和竖的，此时只需要枚举分界点，
+然后取分成的左右两边中更小的一个即可
+//poj1191
+//#include<bits/stdc++.h>
+#include <iostream>
+#include<cstdio>
+#include<queue>
+#include<vector>
+#include<cmath>
+#include<cstring>
+#include<string>
+#include<set>
+using namespace std;
+typedef long long LL;
+const int maxn=10;
+const int MOD=1000000007;
+
+int sum[maxn][maxn];
+int X[maxn][maxn][maxn][maxn];
+int vis[17][maxn][maxn][maxn][maxn];
+int board[maxn][maxn];
+int N;
+
+void calX()
+{
+    for (int i=1; i<=8; i++)
+        for (int j=1; j<=8; j++)
+            sum[i][j]=sum[i][j-1]+board[i][j];
+    for (int x1=1; x1<=8; ++x1)
+        for (int y1=1; y1<=8; ++y1)
+            for (int x2=x1; x2<=8; ++x2)
+                for (int y2=y1; y2<=8; ++y2)
+                {
+                    X[x1][y1][x2][y2]=0;
+                    for (int i=x1; i<=x2; i++)
+                        X[x1][y1][x2][y2]+=sum[i][y2]-sum[i][y1-1];
+                }
+    return ;
+}
+
+int cnt=0;
+int dp(int x1,int y1,int x2,int y2,int n)
+{
+    int ans=1<<29;
+    if(n==1)
+    {
+        return vis[n][x1][y1][x2][y2]=X[x1][y1][x2][y2]*X[x1][y1][x2][y2];
+    }
+    for (int i=x1+1; i<=x2; i++)
+    {
+        if(!vis[n-1][i][y1][x2][y2])
+            ans=min(dp(i,y1,x2,y2,n-1)+X[x1][y1][i-1][y2]*X[x1][y1][i-1][y2],ans);
+        else
+            ans=min(vis[n-1][i][y1][x2][y2]+X[x1][y1][i-1][y2]*X[x1][y1][i-1][y2],ans);
+    }
+    for (int i=x2-1; i>=x1; i--)
+    {
+        if(!vis[n-1][x1][y1][i][y2])
+            ans=min(dp(x1,y1,i,y2,n-1)+X[i+1][y1][x2][y2]*X[i+1][y1][x2][y2],ans);
+        else
+            ans=min(vis[n-1][x1][y1][i][y2]+X[i+1][y1][x2][y2]*X[i+1][y1][x2][y2],ans);
+    }
+    for (int i=y1+1; i<=y2; i++)
+    {
+        if(!vis[n-1][x1][i][x2][y2])
+            ans=min(dp(x1,i,x2,y2,n-1)+X[x1][y1][x2][i-1]*X[x1][y1][x2][i-1],ans);
+        else
+            ans=min(vis[n-1][x1][i][x2][y2]+X[x1][y1][x2][i-1]*X[x1][y1][x2][i-1],ans);
+    }
+    for (int i=y2-1; i>=y1; i--)
+    {
+        if(!vis[n-1][x1][y1][x2][i])
+            ans=min(dp(x1,y1,x2,i,n-1)+X[x1][i+1][x2][y2]*X[x1][i+1][x2][y2],ans);
+        else
+            ans=min(vis[n-1][x1][y1][x2][i]+X[x1][i+1][x2][y2]*X[x1][i+1][x2][y2],ans);
+    }
+
+    return vis[n][x1][y1][x2][y2]=ans;
+}
+
+int main()
+{
+
+    scanf("%d",&N);
+    for (int i=1; i<=8; ++i)
+        for (int j=1; j<=8; ++j)
+        {
+            scanf("%d",&board[i][j]);
+        }
+    calX();
+    memset(vis,0,sizeof(vis));
+    printf("%.3f\n",sqrt(1.0*(dp(1,1,8,8,N)-1.0*X[1][1][8][8]*X[1][1][8][8]/N)/N));
+    return 0;
+}
