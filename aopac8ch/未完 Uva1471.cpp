@@ -1,3 +1,4 @@
+/*
 虽然知道了思路但是还是wa了一晚上，最后的错误出在一个等号上，shit
 大概就是预处理，遍历序列，对于第i个数保留在他之前的比他结尾元素更小的最长的那个长度，就是很像LIS了
 然后由于数据量，只能做nlogn的算法
@@ -10,7 +11,9 @@
        这个操作的实现，就是lower_bound找到的位置，在这个位置之前的那个位置就是要找的fi的尾元素，ans=max（ans，f+g）
 第二种是要不要把找到的位置的元素替换为当前元素？
        这个其实也很容易，首先队列里保存的是每个f对应的最小的sqi，但是既然说lower_bound找到了当前的元素，那首先说明在当前的之前的都不会被取代了
-       因为那些比sqi要小，那之后的元素有没有可能呢
+       因为那些比sqi要小，那之后的元素有没有可能呢，也是没有可能的，因为如果当前的这个f比后面的大，由于这个序列是递增的，那么之后的数一定是比他要大的
+       由于考虑的都是连续的序列，所有在排当前这个元素之前一定有fi-1个元素已经在前面排好了，他不可能凭空出现一个很大的数！
+*/
 #include<cstdio>
 #include<queue>
 #include<vector>
@@ -59,12 +62,10 @@ int main()
             else
                 g[i]=1;
         }
-        //bi[1]=1,b[1]=sq[1];
         ans=f[n];
         len=0;
         for (int i=1;i<=n;++i)
         {
-            //cout<<b[len]<<" "<<sq[i]<<" "<<f[bi[len]]<<" "<<f[i]<<endl;
             if(b[len]<sq[i]&&f[bi[len]]<f[i])//?
             {
                 len++;
@@ -74,15 +75,10 @@ int main()
             else
             {
                 pos=lower_bound(b+1,b+1+len,sq[i])-b;
-                //pos=f[i];
                 ans=max(ans,f[bi[pos-1]]+g[i]);
-                if(f[bi[pos]]<=f[i])
+                if(f[bi[pos]]==f[i])//the most important point!
                     b[pos]=sq[i],bi[pos]=i;
-
             }
-
-            //cout<<i<<" "<<pos<<" "<<len<<" "<<ans<<endl;
-
         }
         printf("%d\n",ans);
     }
